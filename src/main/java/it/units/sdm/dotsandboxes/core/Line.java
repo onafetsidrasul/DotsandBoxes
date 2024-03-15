@@ -1,14 +1,15 @@
 package it.units.sdm.dotsandboxes.core;
 
+import java.util.Objects;
+
 /**
- *
  * Record that models a line on a Dots and Boxes board.
  * Lines do not formally have a direction as it's not required by the game,
  * although it can be inferred from the implicit order of the endpoints.
  *
  * @param color Color of the line
- * @param p1 First endpoint of the line
- * @param p2 Second endpoint of the line
+ * @param p1    First endpoint of the line
+ * @param p2    Second endpoint of the line
  */
 public record Line(Color color, Point p1, Point p2) {
     public Line(int x1, int y1, int x2, int y2) {
@@ -20,11 +21,17 @@ public record Line(Color color, Point p1, Point p2) {
     }
 
     /**
-     * Returns a line with the same endpoint as the original one but a new color
+     * Returns a line with the same endpoints as the original one but with a new color.
+     * Color cannot be null.
+     *
      * @param color Color of the new line
-     * @param line Line to color
+     * @param line  Line to color
      */
     public Line(Color color, Line line) {
-        this(color, line.p1(), line.p2());
+        this(Objects.requireNonNull(color), line.p1(), line.p2());
+    }
+
+    public double length() {
+        return Math.pow(Math.pow((this.p2().x() - this.p1().x()), 2) + Math.pow((this.p2().y() - this.p1().y()), 2), 0.5);
     }
 }
