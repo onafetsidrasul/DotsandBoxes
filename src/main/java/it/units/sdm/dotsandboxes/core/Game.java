@@ -7,49 +7,57 @@ import java.util.Objects;
 
 public class Game {
 
-    final List<Player> players;
-    Board gameBoard;
-    ArrayList<Move> moves;
-    final List<Point> completedBoxes = new ArrayList<>();
-    public Game(List<Player> players, int boardX, int boardY) {
-        this.players = Objects.requireNonNull(players);
+    private final List<Player> players;
+    private final Board gameBoard;
+    private final ArrayList<Move> moves;
+    private final List<Point> completedBoxes = new ArrayList<>();
+
+    public Game(int boardWidth, int boardHeight, List<Player> players) {
+        this.players = Objects.requireNonNull(players); // why have this condition if we check the size immediately after?
         if (this.players.size() < 2) {
             throw new RuntimeException("Game requires a minimum of 2 players.");
         }
         this.players.forEach(Objects::requireNonNull);
-        this.gameBoard = new Board(boardX, boardY);
-        this.moves = new ArrayList<>();
+        gameBoard = new Board(boardWidth, boardHeight);
+        moves = new ArrayList<>();
     }
 
-    public Game(Player player1, Player player2, int boardX, int boardY) {
-        this(Arrays.asList(player1, player2), boardX, boardY);
+    public Game(int boardWidth, int boardHeight, Player... players) {
+        this(boardWidth, boardHeight, Arrays.asList(players));
     }
 
+    /**
+     * Creates game with two players and a default 5x5 board
+     *
+     * @param player1
+     * @param player2
+     */
     public Game(Player player1, Player player2) {
-        this(player1, player2, 5, 5);
+        this(5, 5, player1, player2);
     }
 
-    public Player getNextPlayer() {
-        // we chose to make the player1 start first every time
-        if(moves.isEmpty())
-            return this.players.getFirst();
+    public Player nextPlayer() {    // why isn't this the current player? the player loses control once it makes a move
+        // we chose to make the first player entered start first
+        if (moves.isEmpty()) {
+            return players.getFirst();
+        }
         int lastPlayerIndex = players.indexOf(moves.getLast().player());
         int nextPlayerIndex = (lastPlayerIndex + 1) % players.size();
         return this.players.get(nextPlayerIndex);
     }
 
-    public Player getCurrentPlayer() {
-        return this.moves.getLast().player();
+    public Player currentPlayer() {
+        return moves.getLast().player();
     }
 
     public void makeNextMove(Line line) {
-        Line lineCandidate = new Line(getNextPlayer().getColor(), line.p1(), line.p2());
-        Move moveCandidate = new Move(getNextPlayer(), new Line(null, lineCandidate).hashCode());
+        Line lineCandidate = new Line(nextPlayer().color(), line.p1(), line.p2());
+        Move moveCandidate = new Move(nextPlayer(), line);
         gameBoard.addLine(lineCandidate);
         moves.add(moveCandidate);
     }
 
-    public Board getGameBoard() {
+    public Board board() {
         return gameBoard;
     }
 
@@ -58,12 +66,12 @@ public class Game {
     }
 
     public void updateScore() {
-        for (int i = 0; i < gameBoard.getX_dimension(); i++) {
-            for (int j = 0; j < gameBoard.getY_dimension(); j++) {
-                Point currentPoint= new Point(i,j);
+        for (int i = 0; i < gameBoard.width() - 1; i++) {
+            for (int j = 0; j < gameBoard.height() - 1; j++) {
+                Point currentPoint = new Point(i, j);
                 if (gameBoard.isBoxCompleted(currentPoint) && !completedBoxes.contains(currentPoint)) {
-                    getCurrentPlayer().increaseScore();
-                    completedBoxes.add(new Point(i,j));
+                    currentPlayer().increaseScoreByOne();
+                    completedBoxes.add(new Point(i, j));
                 }
             }
         }
