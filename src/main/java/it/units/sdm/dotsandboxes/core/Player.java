@@ -8,22 +8,22 @@ public class Player {
     public Player(String name, Color color) {
         this.name = name;
         this.color = color;
-        this.score = 0;
+        score = 0;
     }
 
-    public int getScore() {
+    public int score() {
         return score;
     }
 
-    public void increaseScore() {
+    public void increaseScoreByOne() {
         score++;
     }
 
-    public String getName() {
+    public String name() {
         return name;
     }
 
-    public Color getColor() {
+    public Color color() {
         return color;
     }
 
