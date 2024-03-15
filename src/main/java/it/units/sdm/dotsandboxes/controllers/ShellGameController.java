@@ -2,7 +2,6 @@ package it.units.sdm.dotsandboxes.controllers;
 
 import de.codeshelf.consoleui.prompt.ConsolePrompt;
 import de.codeshelf.consoleui.prompt.InputResult;
-import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
 import it.units.sdm.dotsandboxes.core.Board;
 import it.units.sdm.dotsandboxes.core.Color;
 import it.units.sdm.dotsandboxes.core.Line;
@@ -10,8 +9,6 @@ import it.units.sdm.dotsandboxes.core.Player;
 import org.fusesource.jansi.AnsiConsole;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 
 public class ShellGameController implements IGameController {
 
@@ -43,14 +40,15 @@ public class ShellGameController implements IGameController {
                                 .addPrompt().build()
                 ).get(promptName);
                 name = ir.getInput();
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         } while (name == null || name.isEmpty());
         return name;
     }
 
     @Override
     public int[] getBoardDimensions() {
-        return new int[] { 6, 6 };
+        return new int[]{6, 6};
     }
 
     @Override
@@ -73,8 +71,8 @@ public class ShellGameController implements IGameController {
                 sb.append(" ● ");
                 if (j < width - 1) {
                     searched = new Line(j, i, j + 1, i);
-                    if (board.getLines().containsKey(searched.hashCode())) {
-                        sb.append(board.getLines().get(
+                    if (board.linesDrawn().containsKey(searched.hashCode())) {
+                        sb.append(board.linesDrawn().get(
                                 searched.hashCode()).color().getFormat().format("="));
                     } else {
                         sb.append(" ");
@@ -87,8 +85,8 @@ public class ShellGameController implements IGameController {
                 sb = new StringBuilder("  ┃");
                 for (int j = 0; j < width; j++) {
                     searched = new Line(j, i, j, i + 1);
-                    if (board.getLines().containsKey(searched.hashCode())) {
-                        sb.append(board.getLines().get(
+                    if (board.linesDrawn().containsKey(searched.hashCode())) {
+                        sb.append(board.linesDrawn().get(
                                 searched.hashCode()).color().getFormat().format(" ‖ "));
                     } else {
                         sb.append("   ");
@@ -149,6 +147,6 @@ public class ShellGameController implements IGameController {
 
     @Override
     public void endGame(Player winner) {
-        System.out.println("The winner is " + winner.getName());
+        System.out.println("The winner is " + winner.name());
     }
 }

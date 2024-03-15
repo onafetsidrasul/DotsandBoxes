@@ -23,7 +23,7 @@ public interface IGameController {
      * Get the name to be assigned to the player with the passed number and color.
      *
      * @param playerNumber ordinal of the player being created
-     * @param color being assigned to the player being created
+     * @param color        being assigned to the player being created
      * @return the string literal for the name to be assigned to the player being created
      */
     String getPlayerName(int playerNumber, Color color);
