@@ -25,20 +25,20 @@ public class GameSession {
         }
         int[] dimensions = controller.getBoardDimensions();
 
-        final Game game = new Game(players, dimensions[0], dimensions[1]);
+        final Game game = new Game(dimensions[0], dimensions[1], players);
         while (!game.hasEnded()) {
-            final Line line = controller.waitForLine(game.getNextPlayer());
+            final Line line = controller.waitForLine(game.nextPlayer());
             try {
                 game.makeNextMove(new Line(line.p1(), line.p2()));
             } catch (RuntimeException e) {
                 continue;
             }
-            controller.updatePlayer(game.getNextPlayer());
+            controller.updatePlayer(game.nextPlayer());
             /* FIXME: should we be passing the board object for updating the board UI? */
-            controller.updateBoard(game.getGameBoard());
+            controller.updateBoard(game.board());
         }
         controller.endGame(players.stream()
-                .max(Comparator.comparingInt(Player::getScore))
+                .max(Comparator.comparingInt(Player::score))
                 .orElseThrow());
     }
 
