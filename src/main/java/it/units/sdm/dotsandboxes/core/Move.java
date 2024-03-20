@@ -16,4 +16,12 @@ public class Move {
     public int uncoloredNormalizedLineHash() {
         return uncoloredNormalizedLineHash;
     }
+
+    @Override
+    public String toString() {
+        return "Move{" +
+                "player=" + player +
+                ", uncoloredNormalizedLineHash=" + uncoloredNormalizedLineHash +
+                '}';
+    }
 }

@@ -7,4 +7,11 @@ package it.units.sdm.dotsandboxes.core;
  * @param y Y coordinate of the point
  */
 public record Point(int x, int y) {
+    @Override
+    public String toString() {
+        return "(" +
+                x +
+                ", " + y +
+                ')';
+    }
 }

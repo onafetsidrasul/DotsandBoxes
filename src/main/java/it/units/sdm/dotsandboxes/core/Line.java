@@ -34,4 +34,13 @@ public record Line(Color color, Point p1, Point p2) {
     public double length() {
         return Math.pow(Math.pow((this.p2().x() - this.p1().x()), 2) + Math.pow((this.p2().y() - this.p1().y()), 2), 0.5);
     }
+
+    @Override
+    public String toString() {
+        return "Line{" +
+                "color=" + color +
+                ", p1=" + p1 +
+                ", p2=" + p2 +
+                '}';
+    }
 }
